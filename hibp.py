@@ -1,29 +1,27 @@
 import requests
 import hashlib
-
-def hashing(buff):
+"""https://docs.python.org/3/library/hashlib.html"""
+def hibp(buff):
     y=hashlib.sha1(buff.encode('utf-8')).hexdigest()
-    print(y.upper())
     y=y.upper()
-    x=hibp(y)
+    x=check(y)
     if x == 0:
-        return x
+        return False
     else:
-        return buff
-def hibp(y):
+        return True
+def check(y):
+    """https://www.w3schools.com/python/module_requests.asp"""
+
     o=requests.get ("https://api.pwnedpasswords.com/range/"+y[:5])
-    print(o.text)
-    print("-----------------------------------------------")
+
     with open("hashes.txt",'w') as hash:
         hash.write(o.text)
     x=1
     with open("hashes.txt",'r') as hash:
         for i in hash:
             if (y[5:]==i[:35]):
-                print('leaked')
                 x=0
-                print(i)
                 break
-            else:
-                print("not leaked")
+
     return x
+
