@@ -44,6 +44,12 @@ def count(str1, str2):
     counted = set_string1 & set_string2
     return len(counted)
 
+def addAdmin(a,b):
+    Mycursor.execute('''Insert Into Access_table(id,Pass,Access,Date) Values(%s,%s,%s,%s)''',
+                     (a, b, "ADMIN", DateOfMod,))
+    mydb.commit()
+    return True
+
 
 # Verifying password with policy
 def pass_Check(x):
@@ -66,11 +72,11 @@ def pass_Check(x):
 
 
 # Generating password
+
 #user name for pass_Gen function
 def pass_Gen(user):
     u=user
     x = ''
-    # New File with Passwords
 
     for i in range(15):
 
@@ -80,21 +86,22 @@ def pass_Gen(user):
     b=pass_Check(x)
     if b==True:
         p=x
-        print(p)
+
         '''Python MySQL Insert Into Table W3 School'''
         "https://www.w3schools.com/python/python_mysql_insert.asp"
         Mycursor.execute('''Insert Into Access_table(id,Pass,Access,Date) Values(%s,%s,%s,%s)''', (u, p, 'user', DateOfMod,))
         mydb.commit()
+        return p
     else:
         pass_Gen(u)
 
-pass_Gen("User1")
+
 
 
 
 #Password in batch generation
-def batch_Gen():
-    with open('users.csv', 'r') as csv_file:
+def batch_Gen(b):
+    with open(b, 'r') as csv_file:
         R = csv.reader(csv_file)
         next(R)
 
@@ -102,9 +109,4 @@ def batch_Gen():
         for i in R:
             pass_Gen(i[1])
 
-
-
-
-
-batch_Gen()
 
