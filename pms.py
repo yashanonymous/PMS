@@ -17,12 +17,11 @@ with open('db.json') as crd:
         database=db['Database']
     )
 
-
+d=date.today()
 Mycursor=mydb.cursor()
 
-print(date.today())
-
 # policy file
+"https://www.w3schools.com/python/python_json.asp"
 with open('policy.json') as policy:
     r=json.load(policy)
 
@@ -36,14 +35,14 @@ DateOfMod = r['DateofMod']
 change = r['PolicyChange']
 
 '''Count the Number of matching characters in a pair of string Geeks for Geeks'''
+"https://www.geeksforgeeks.org/python-count-the-number-of-matching-characters-in-a-pair-of-string/"
+
 
 def count(str1, str2):
     set_string1 = set(str1)
     set_string2 = set(str2)
     counted = set_string1 & set_string2
     return len(counted)
-
-
 
 
 # Verifying password with policy
@@ -57,27 +56,39 @@ def pass_Check(x):
 
     if (Upper <= up and Lower <= low and Chars <= punct and Digits <= dig and Minlen <= len(x)):
 
-        y=hibp.hashing(x)
-        if y==0:
-            pass_Gen()
+        y = hibp.hibp(x)
+        if y==False:
+            return False
         else:
-            print(y)
+            return True
     else:
-
-        pass_Gen()
+        return False
 
 
 # Generating password
-def pass_Gen():
+#user name for pass_Gen function
+def pass_Gen(user):
+    u=user
     x = ''
+    # New File with Passwords
+
     for i in range(15):
+
+        """https://www.w3schools.com/python/ref_random_choices.asp"""
         x = x + (random.choice(string.ascii_lowercase + string.ascii_uppercase + string.punctuation + string.digits))
 
-    pass_Check(x)
-    p=x
-    return p
+    b=pass_Check(x)
+    if b==True:
+        p=x
+        print(p)
+        '''Python MySQL Insert Into Table W3 School'''
+        "https://www.w3schools.com/python/python_mysql_insert.asp"
+        Mycursor.execute('''Insert Into Access_table(id,Pass,Access,Date) Values(%s,%s,%s,%s)''', (u, p, 'user', DateOfMod,))
+        mydb.commit()
+    else:
+        pass_Gen(u)
 
-pass_Gen()
+pass_Gen("User1")
 
 
 
@@ -86,24 +97,14 @@ def batch_Gen():
     with open('users.csv', 'r') as csv_file:
         R = csv.reader(csv_file)
         next(R)
-        #New File with Passwords
-        with open('userspass.csv','w') as csv_file2:
-            W = csv.writer(csv_file2,delimiter=' ')
-
-            for i in R:
-                p=pass_Gen()
-                W.writerow(i[0])
-                W.writerow(i[1])
-                W.writerow(p)
-                '''Python MySQL Insert Into Table W3 School'''
-                #Mycursor.execute('''Insert Into Access_table(id,Username,Pass,Access,Date) Values(%s,%s,%s,%s,%s)''', (i[0],i[1],p,'User',DateOfMod,))
 
 
-                mydb.commit()
+        for i in R:
+            pass_Gen(i[1])
+
+
+
+
 
 batch_Gen()
 
-with open('userspass.csv','r') as pswd_file:
-    pwd=csv.reader(pswd_file,delimiter=' ')
-    for i in pwd:
-        print(i)
